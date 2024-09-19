@@ -1,0 +1,4 @@
+﻿  lab 2 Logika.cpp
+D:\c++\lab 2 Logika\lab 2 Logika.cpp(29,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+D:\c++\lab 2 Logika\lab 2 Logika.cpp(39,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  lab 2 Logika.vcxproj -> D:\c++\lab 2 Logika\x64\Debug\lab 2 Logika.exe
