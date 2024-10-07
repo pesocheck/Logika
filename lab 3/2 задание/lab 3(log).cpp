@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include <iostream>
 
 struct node
 {
@@ -31,8 +32,9 @@ struct node* get_struct(void)
 		exit(1);
 	}
 
-	printf("Введите название объекта: \n");   // вводим данные
+	printf("Введите название объекта: ");   // вводим данные
 	scanf("%s", s);
+	printf("\n");
 	if (*s == 0)
 	{
 		printf("Запись не была произведена\n");
@@ -63,7 +65,7 @@ void spstore(void)
 	return;
 }
 
-node* get()
+node* get_element()
 {
 	node* res = head;
 	head = head->next;
@@ -108,89 +110,36 @@ struct node* find(char* name)
 	return NULL;
 }
 
-/* Удаление элемента по содержимому. */
-void del(char* name)
+void print_menu()
 {
-	struct node* struc = head; // указатель, проходящий по списку установлен на начало списка
-	struct node* prev = NULL;// указатель на предшествующий удаляемому элемент
-	int flag = 0;      // индикатор отсутствия удаляемого элемента в списке
-
-	if (head == NULL) // если голова списка равна NULL, то список пуст
-	{
-		printf("Список пуст\n");
-		return;
-	}
-
-	if (strcmp(name, struc->inf) == 0) // если удаляемый элемент - первый
-	{
-		flag = 1;
-		head = struc->next; // установливаем голову на следующий элемент
-		free(struc);  // удаляем первый элемент
-		struc = head; // устанавливаем указатель для продолжения поиска
-	}
-	else
-	{
-		prev = struc;
-		struc = struc->next;
-	}
-
-	while (struc) // проход по списку и поиск удаляемого элемента
-	{
-		if (strcmp(name, struc->inf) == 0) // если нашли, то
-		{
-			flag = 1;         // выставляем индикатор
-			if (struc->next)  // если найденный элемент не последний в списке
-			{
-				prev->next = struc->next; // меняем указатели
-				free(struc);		    // удаляем  элемент
-				struc = prev->next; // устанавливаем указатель для продолжения поиска
-			}
-			else			// если найденный элемент последний в списке
-			{
-				prev->next = NULL; // обнуляем указатель предшествующего элемента
-				free(struc);	// удаляем  элемент
-				return;
-			}
-		}
-		else // если не нашли, то
-		{
-			prev = struc; // устанавливаем указатели для продолжения поиска
-			struc = struc->next;
-		}
-	}
-
-	if (flag == 0)				// если флаг = 0, значит нужный элемент не найден
-	{
-		printf("Элемент не найден\n");
-		return;
-	}
-
-
+	printf("Выберете действие:\n");
+	printf("1. Добавить элемент в очередь\n");
+	printf("2. Получить элемент из очереди \n");
+	printf("3. Вывести очередь \n");
+	printf("4. Выход \n");
 }
-
 
 int main()
 {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
-	int size = 5;
-	
-	for(int i = 0; i < size; ++i)
+	bool exit = false;
+	while (!exit)
 	{
-		spstore();
+		print_menu();
+		int option = 0;
+		scanf("%d", &option);
+
+		switch (option)
+		{
+		case 1: spstore(); break;
+		case 2: printf("Полученный элемент: %s\n", get_element()->inf); break;
+		case 3: review(); break;
+		case 4: exit = true; break;
+		default: std::cin.get(); break;
+		}
 	}
 
-	printf("Исходная очередь: \n");
-	review();
-
-	auto res1 = get();
-	printf("Получен элемент: %s\n", res1->inf);
-	auto res2 = get();
-	printf("Получен элемент: %s\n", res2->inf);
-
-	printf("Оставшиеся элементы очереди: \n");
-	review();
-	
 	return 0;
 }

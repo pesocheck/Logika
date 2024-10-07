@@ -218,6 +218,7 @@ int main()
 		case 2: delete_element(); break;
 		case 3: review(); break;
 		case 4: exit = true; break;
+		default: std::cin.get(); break;
 		}
 	}
 
