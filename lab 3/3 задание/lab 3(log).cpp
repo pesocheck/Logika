@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-
+#include <iostream>
 struct node
 {
 	char inf[256];  // полезная информация
@@ -63,7 +63,7 @@ void spstore(void)
 	return;
 }
 
-node* get()
+node* get_element()
 {
 
 	node* curr = head;
@@ -90,7 +90,7 @@ void review(void)
 	}
 	while (struc)
 	{
-		printf("%d) Имя - %s \n", i++, struc->inf);
+		printf("%d)  %s \n", i++, struc->inf);
 		struc = struc->next;
 	}
 	return;
@@ -175,30 +175,36 @@ void del(char* name)
 
 
 }
-
+void print_menu()
+{
+	printf("Выберете действие:\n");
+	printf("1. Добавить элемент в стек\n");
+	printf("2. Получить элемент из стека \n");
+	printf("3. Вывести очередь \n");
+	printf("4. Выход \n");
+}
 
 int main()
 {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
-	int size = 5;
-	
-	for(int i = 0; i < size; ++i)
+	bool exit = false;
+	while (!exit)
 	{
-		spstore();
+		print_menu();
+		int option = 0;
+		scanf("%d", &option);
+
+		switch (option)
+		{
+		case 1: spstore(); break;
+		case 2: printf("Полученный элемент: %s\n", get_element()->inf); break;
+		case 3: review(); break;
+		case 4: exit = true; break;
+		default: std::cin.get(); break;
+		}
 	}
 
-	printf("Исходный стек: \n");
-	review();
-
-	auto res1 = get();
-	printf("Получен элемент: %s\n", res1->inf);
-	auto res2 = get();
-	printf("Получен элемент: %s\n", res2->inf);
-
-	printf("Оставшиеся элементы стека: \n");
-	review();
-	
 	return 0;
 }
