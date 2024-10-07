@@ -33,8 +33,9 @@ struct node* get_struct(void)
 		exit(1);
 	}
 
-	printf("Введите название объекта: \n");   
+	printf("Введите название объекта: ");   
 	scanf("%s", s);
+	printf("\n");
 	if (*s == 0)
 	{
 		printf("Запись не была произведена\n");
@@ -43,8 +44,9 @@ struct node* get_struct(void)
 	strcpy(p->inf, s);
 
 	// Добавляем приоритет
-	printf("Введите приоритет объекта: \n");   
+	printf("Введите приоритет объекта: ");   
 	scanf("%d",&priority);
+	printf("\n");
 	p->priority = priority;
 
 	p->next = NULL;
@@ -180,21 +182,44 @@ void del(char* name)
 	}
 }
 
+void delete_element()
+{
+	char name[256];
+	printf("Введите имя элемента: ");
+	scanf("%s", name);
+	printf("\n");
+	del(name);
+}
+
+void print_menu()
+{
+	printf("Выберете действие:\n");
+	printf("1. Добавить элемент в список\n");
+	printf("2. Удалить элемент \n");
+	printf("3. Вывести список \n");
+	printf("4. Выход \n");
+}
+
 int main()
 {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
-	int size = 0;
-	printf("Введите размер списка");
-	scanf("%d", &size);
-	
-	for(int i = 0; i < size; ++i)
+	bool exit = false;
+	while(!exit)
 	{
-		spstore();
-	}
+		print_menu();
+		int option = 0;
+		scanf("%d", &option);
 
-	review();
+		switch(option)
+		{
+		case 1: spstore(); break;
+		case 2: delete_element(); break;
+		case 3: review(); break;
+		case 4: exit = true; break;
+		}
+	}
 
 	return 0;
 }
