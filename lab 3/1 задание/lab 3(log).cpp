@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-
+#include <iostream>
 struct node
 {
 	char inf[256];  
