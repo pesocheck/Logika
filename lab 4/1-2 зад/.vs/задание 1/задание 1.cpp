@@ -92,14 +92,16 @@ int main()
 	}
 
 	print_tree(root, 0);
-
+	int num;
 	int cnt;
-	cnt = count(root, 1, 0);
-	printf("найдено %d\n", cnt);
-
-	struct Node* r = find(root, 1);
-	if (r) printf("найден %d\n", r->data);
+	printf("Введите элемент для поиска: ");
+	scanf_s("%d", &num);
+	struct Node* r = find(root, num);
+	if (r) printf("Элемент найден: %d\n", r->data);
 	else printf("элемент не найден\n");
+
+	cnt = count(root, num, 0);
+	printf("Элиментов %d найдено: %d\n",num, cnt);
 
 	scanf_s("%d", &D);
 	return 0;
