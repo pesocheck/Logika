@@ -1,0 +1,9 @@
+﻿  lab6(2(2)).cpp
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(138,37): error C2059: синтаксическая ошибка: while
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(138,50): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(167,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(170,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(187,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(192,9): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(197,9): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\user\Documents\GitHub\Logika\lab 6\lab 6(2)\lab 6(2(2))\lab6(2(2))\lab6(2(2)).cpp(202,9): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
