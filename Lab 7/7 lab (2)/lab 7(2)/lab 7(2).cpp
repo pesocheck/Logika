@@ -41,6 +41,20 @@ void printG(int** G, int size) {
     }
 }
 
+// Рекурсивная версия DFS
+void DFS_recursive(int v, int** G, int size, int* vis) {
+    vis[v] = 1; // Помечаем вершину как посещённую
+    printf("%d ", v); // Выводим текущую вершину
+
+    // Рекурсивно посещаем все соседние вершины
+    for (int i = 0; i < size; i++) {
+        if (G[v][i] == 1 && !vis[i]) {
+            DFS_recursive(i, G, size, vis);
+        }
+    }
+}
+
+// Нерекурсивная версия DFS
 void DFS(int s, int** G, int size) {
     int* vis = (int*)malloc(size * sizeof(int)); // Массив для отслеживания посещённых вершин
     for (int i = 0; i < size; i++) {
@@ -76,7 +90,10 @@ int main() {
 
     int size;
     printf("Введите кол-во вершин: ");
-    scanf_s("%d", &size);
+    while (scanf_s("%d", &size) != 1 || size <= 0) { // Проверка на валидность ввода
+        printf("Пожалуйста, введите положительное целое число: ");
+        while (getchar() != '\n'); // Очистка ввода
+    }
 
     int** G = createG(size); // Создаем граф
     printf("Матрица смежности:\n");
@@ -84,9 +101,21 @@ int main() {
 
     int s;
     printf("Введите начальную вершину (0-%d): ", size - 1);
-    scanf_s("%d", &s);
-    printf("Обход графа:\n");
-    DFS(s, G, size); // Выполняем обход в глубину
+    while (scanf_s("%d", &s) != 1 || s < 0 || s >= size) { // Проверка на валидность ввода
+        printf("Пожалуйста, введите число в диапазоне от 0 до %d: ", size - 1);
+        while (getchar() != '\n'); // Очистка ввода
+    }
+
+    printf("Обход графа (рекурсивный):\n");
+    int* vis_recursive = (int*)malloc(size * sizeof(int));
+    for (int i = 0; i < size; i++) {
+        vis_recursive[i] = 0; // Изначально все вершины непосещены
+    }
+    DFS_recursive(s, G, size, vis_recursive); // Выполняем рекурсивный обход
+    free(vis_recursive); // Освобождаем память
+
+    printf("\nОбход графа (нерекурсивный):\n");
+    DFS(s, G, size); // Выполняем нерекурсивный обход
 
     // Освобождение памяти
     for (int i = 0; i < size; i++) {
