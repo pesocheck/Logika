@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿#define _CRT_SECURE_NO_WARNINGS
+=======
+#define _CRT_SECURE_NO_WARNINGS
+>>>>>>> ae01431776f90ec45a9c4590da209c578c5522de
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale>
