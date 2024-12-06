@@ -1,134 +1,119 @@
-﻿#include <iostream>
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <cstdlib>
-#include <vector>
-#include <stack>
+#include <stdlib.h>
+#include <locale>
+typedef struct Node {
+    int vertex;
+    struct Node* next;
+} Node;
 
-struct Graph {
-    int size; // Количество вершин 
-    std::vector<std::vector<int>> adjList; // Список смежности
-    std::vector<std::vector<int>> adjMatrix; // Матрица смежности
-};
+typedef struct Graph {
+    int size;
+    Node** adjLists;
+} Graph;
 
 // Функция для создания графа
-Graph* createG(int size) {
-    Graph* G = new Graph;
-    G->size = size;
-    G->adjList.resize(size);
+Graph* createGraph(int size) {
+    Graph* graph = (Graph*)malloc(sizeof(Graph));
+    graph->size = size;
+    graph->adjLists = (Node**)malloc(size * sizeof(Node*));
 
-    G->adjMatrix.resize(size, std::vector<int>(size, 0));
-
-    // Заполнение графа случайными рёбрами
     for (int i = 0; i < size; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (rand() % 2) { // С вероятностью 50% добавляем ребро
-                G->adjList[i].push_back(j);
-                G->adjList[j].push_back(i);
-
-                G->adjMatrix[i][j] = 1; // Обновление матрицы смежности
-                G->adjMatrix[j][i] = 1;
-            }
-        }
+        graph->adjLists[i] = NULL;
     }
-    return G;
+
+    return graph;
 }
 
-// Функция для печати графа (список смежности)
-void printAdjList(Graph* G) {
-    for (int i = 0; i < G->size; i++) {
-        printf("%d: ", i);
-        for (int j : G->adjList[i]) {
-            printf("%d ", j);
+// Функция для добавления ребра в граф
+void addEdge(Graph* graph, int src, int dest) {
+    // Добавляем ребро от src к dest
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->vertex = dest;
+    newNode->next = graph->adjLists[src];
+    graph->adjLists[src] = newNode;
+
+    // Добавляем ребро от dest к src (для неориентированного графа)
+    newNode = (Node*)malloc(sizeof(Node));
+    newNode->vertex = src;
+    newNode->next = graph->adjLists[dest];
+    graph->adjLists[dest] = newNode;
+}
+
+// Функция для печати графа
+void printGraph(Graph* graph) {
+    for (int i = 0; i < graph->size; i++) {
+        Node* temp = graph->adjLists[i];
+        printf("Соседи вершины %d: ", i);
+        while (temp) {
+            printf("%d -> ", temp->vertex);
+            temp = temp->next;
         }
-        printf("\n");
+        printf("NULL\n");
     }
 }
 
-// Функция для печати графа (матрица смежности)
-void printAdjMatrix(Graph* G) {
-    printf("Матрица смежности: \n");
-    for (int i = 0; i < G->size; i++) {
-        for (int j = 0; j < G->size; j++) {
-            printf("%d ", G->adjMatrix[i][j]);
+// Функция для обхода в глубину
+void DFS(int vertex, int* visited, Graph* graph) {
+    visited[vertex] = 1;
+    printf("%d ", vertex);
+
+    Node* temp = graph->adjLists[vertex];
+    while (temp) {
+        int adjVertex = temp->vertex;
+        if (!visited[adjVertex]) {
+            DFS(adjVertex, visited, graph);
         }
-        printf("\n");
+        temp = temp->next;
     }
-}
-
-// Функция для обхода в глубину по списку смежности
-void DFS_AdjList(int s, Graph* G) {
-    std::vector<int> vis(G->size, 0); // Массив для отслеживания посещённых вершин
-    std::stack<int> stack; // Стек для хранения вершин
-    stack.push(s); // Начинаем с начальной вершины
-
-    printf("Обход графа (список смежности):\n");
-    while (!stack.empty()) {
-        int v = stack.top(); // Получаем вершину из стека
-        stack.pop(); // Удаляем вершину из стека
-
-        if (!vis[v]) { // Если вершина не посещена
-            vis[v] = 1; // Помечаем её как посещённую
-            printf("%d ", v); // Выводим текущую вершину
-
-            // Добавляем все соседние вершины в стек
-            for (int neighbor : G->adjList[v]) { // Обходим в порядке возрастания
-                if (!vis[neighbor]) {
-                    stack.push(neighbor);
-                }
-            }
-        }
-    }
-    printf("\n");
-}
-
-// Функция для обхода в глубину по матрице смежности
-void DFS_AdjMatrix(int s, Graph* G) {
-    std::vector<int> vis(G->size, 0); // Массив для отслеживания посещённых вершин
-    std::stack<int> stack; // Стек для хранения вершин
-    stack.push(s); // Начинаем с начальной вершины
-
-    printf("Обход графа ( матрица смежности):\n");
-    while (!stack.empty()) {
-        int v = stack.top(); // Получаем вершину из стека
-        stack.pop(); // Удаляем вершину из стека
-
-        if (!vis[v]) { // Если вершина не посещена
-            vis[v] = 1; // Помечаем её как посещённую
-            printf("%d ", v); // Выводим текущую вершину
-
-            // Добавляем все соседние вершины в стек
-            for (int neighbor = 0; neighbor < G->size; neighbor++) { // Обходим все вершины
-                if (G->adjMatrix[v][neighbor] == 1 && !vis[neighbor]) { // Проверяем смежность
-                    stack.push(neighbor);
-                }
-            }
-        }
-    }
-    printf("\n");
 }
 
 int main() {
     setlocale(LC_ALL, "Rus");
-    srand(time(0)); // Инициализация генератора случайных чисел
+    int size, src, dest;
 
-    int size;
-    printf("Введите кол-во вершин: ");
-    scanf_s("%d", &size);
+    printf("Введите количество вершин: ");
+    scanf("%d", &size);
 
-    Graph* G = createG(size); // Создаем граф
-    printf("Список смежности:\n");
-    printAdjList(G); // Печатаем список смежности
+    Graph* graph = createGraph(size);
 
-    printf("Матрица смежности:\n");
-    printAdjMatrix(G); // Печатаем матрицу смежности
+    // Ввод ребер
+    printf("Введите количество ребер: ");
+    int edges;
+    scanf("%d", &edges);
+    printf("Введите ребра (src dest):\n");
+    for (int i = 0; i < edges; i++) {
+        scanf("%d %d", &src, &dest);
+        addEdge(graph, src, dest);
+    }
 
-    int s;
-    printf("Введите начальную вершину (0-%d): ", size - 1);
-    scanf_s("%d", &s);
-    DFS_AdjList(s, G); // Выполняем обход в глубину по списку смежности
-    DFS_AdjMatrix(s, G); // Выполняем обход в глубину по матрице смежности
+    // Печать графа
+    printGraph(graph);
+
+    // Обход в глубину
+    int* visited = (int*)malloc(size * sizeof(int));
+    for (int i = 0; i < size; i++) {
+        visited[i] = 0; // Инициализация массива посещенных вершин
+    }
+
+    printf("Введите начальную вершину для обхода в глубину: ");
+    int startVertex;
+    scanf("%d", &startVertex);
+    printf("Обход графа:\n");
+    DFS(startVertex, visited, graph);
 
     // Освобождение памяти
-    delete G; // Освобождаем память для графа
+    for (int i = 0; i < size; i++) {
+        Node* temp = graph->adjLists[i];
+        while (temp) {
+            Node* toDelete = temp;
+            temp = temp->next;
+            free(toDelete);
+        }
+    }
+    free(graph->adjLists);
+    free(graph);
+    free(visited);
+
     return 0;
 }
