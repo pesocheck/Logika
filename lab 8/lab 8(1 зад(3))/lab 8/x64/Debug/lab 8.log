@@ -1,0 +1,3 @@
+﻿  lab 8.cpp
+C:\Users\user\Documents\GitHub\Logika\lab 8\lab 8(1 зад(3))\lab 8\lab 8.cpp(70,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  lab 8.vcxproj -> C:\Users\user\Documents\GitHub\Logika\lab 8\lab 8(1 зад(3))\lab 8\x64\Debug\lab 8.exe

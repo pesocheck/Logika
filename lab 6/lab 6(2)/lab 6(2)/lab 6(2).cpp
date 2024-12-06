@@ -187,7 +187,7 @@ int main(void) {
     for (int i = 0; i < nG2; i++) {
 		delete[] G2[i];
     }
-    delete [] G2;
+    free (G2);
 
     return 0;
 }
