@@ -1,2 +1,3 @@
 ﻿  lab 10.cpp
+C:\Users\user\Documents\GitHub\Logika\lab 10\lab 10\lab 10.cpp(121,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   lab 10.vcxproj -> C:\Users\user\Documents\GitHub\Logika\lab 10\lab 10\x64\Debug\lab 10.exe
