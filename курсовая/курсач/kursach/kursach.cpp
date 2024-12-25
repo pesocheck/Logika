@@ -3,36 +3,41 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <windows.h>
+#include <time.h>
 
-void symmetric_difference(int** sets, int* sizes, int numSets) {
-    int* result = (int*)malloc(1000 * sizeof(int));
+void symmetric_difference(int* setA, int sizeA, int* setB, int sizeB) {
+    int* result = (int*)malloc((sizeA + sizeB) * sizeof(int));
     int resultSize = 0;
 
-    int* added = (int*)calloc(1000, sizeof(int));
-
-    for (int i = 0; i < numSets; i++) {
-        for (int j = 0; j < sizes[i]; j++) {
-            int found = 0;
-
-            for (int k = 0; k < numSets; k++) {
-                if (k != i) {
-                    for (int l = 0; l < sizes[k]; l++) {
-                        if (sets[i][j] == sets[k][l]) {
-                            found = 1;
-                            break;
-                        }
-                    }
-                }
-                if (found) break;
+    
+    for (int i = 0; i < sizeA; i++) {
+        int found = 0;
+        for (int j = 0; j < sizeB; j++) {
+            if (setA[i] == setB[j]) {
+                found = 1;
+                break;
             }
-
-            if (!found && !added[sets[i][j]]) {
-                result[resultSize++] = sets[i][j];
-                added[sets[i][j]] = 1;
-            }
+        }
+        if (!found) {
+            result[resultSize++] = setA[i];
         }
     }
 
+    
+    for (int i = 0; i < sizeB; i++) {
+        int found = 0;
+        for (int j = 0; j < sizeA; j++) {
+            if (setB[i] == setA[j]) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            result[resultSize++] = setB[i];
+        }
+    }
+
+    
     printf("Симметрическая разность: ");
     for (int i = 0; i < resultSize; i++) {
         printf("%d ", result[i]);
@@ -40,7 +45,6 @@ void symmetric_difference(int** sets, int* sizes, int numSets) {
     printf("\n");
 
     free(result);
-    free(added);
 }
 
 void input_set(int** set, int* size) {
@@ -72,8 +76,49 @@ void input_set(int** set, int* size) {
 
     *size = uniqueCount;
 
-    
     printf("Вы ввели множество: { ");
+    for (int i = 0; i < *size; i++) {
+        printf("%d ", (*set)[i]);
+    }
+    printf("}\n");
+}
+
+void input_random_set(int** set, int* size) {
+    printf("Хотите ли вы задать количество элементов вручную (1) или использовать случайное количество (2)? ");
+    int choice;
+    scanf("%d", &choice);
+
+    if (choice == 1) {
+        printf("Введите количество элементов множества: ");
+        scanf("%d", size);
+    }
+    else {
+        
+        *size = rand() % 10 + 1;
+        printf("Случайное количество элементов: %d\n", *size);
+    }
+
+    *set = (int*)malloc((*size) * sizeof(int));
+    int uniqueCount = 0;
+
+    
+    while (uniqueCount < *size) {
+        int element = rand() % 100; 
+
+        int exists = 0;
+        for (int i = 0; i < uniqueCount; i++) {
+            if ((*set)[i] == element) {
+                exists = 1;
+                break;
+            }
+        }
+
+        if (!exists) {
+            (*set)[uniqueCount++] = element;
+        }
+    }
+
+    printf("Сгенерированное множество: { ");
     for (int i = 0; i < *size; i++) {
         printf("%d ", (*set)[i]);
     }
@@ -82,7 +127,7 @@ void input_set(int** set, int* size) {
 
 void display_intro() {
     printf("===============================================================================================\n");
-    printf("         Реализация операции нахождения симметрической разности двух и более множеств          \n");
+    printf("         Реализация операции нахождения симметрической разности двух и более множеств           \n");
     printf("         Выполнил: Макаров Алексей Сергеевич                                                   \n");
     printf("         Учебная группа: 23ВВВ1                                                                \n");
     printf("===============================================================================================\n");
@@ -92,11 +137,11 @@ void display_intro() {
 
 int main() {
     setlocale(LC_ALL, "Rus");
+    srand(time(NULL));
     display_intro();
 
-    char y = '0';
-    int** sets = NULL;
-    int* sizes = NULL;
+    int* sets[2] = { NULL, NULL }; 
+    int sizes[2] = { 0, 0 }; 
     int numSets = 0;
     int choice;
 
@@ -106,53 +151,65 @@ int main() {
         printf("\n==============================\n");
         printf("          МЕНЮ               \n");
         printf("==============================\n");
-        printf("1. Ввести множество\n");
-        printf("2. Найти симметрическую разность\n");
-        printf("3. Выход\n");
+        printf("1. Ввести множество вручную\n");
+        printf("2. Создать множество с случайными значениями\n");
+        printf("3. Найти симметрическую разность\n");
+        printf("4. Выход\n");
         printf("==============================\n");
         printf("Выберите опцию: ");
         scanf("%d", &choice);
 
         switch (choice) {
         case 1: {
-            system("cls");
-            sets = (int**)realloc(sets, (numSets + 1) * sizeof(int*));
-            sizes = (int*)realloc(sizes, (numSets + 1) * sizeof(int));
-            input_set(&sets[numSets], &sizes[numSets]);
-            numSets++;
+            if (numSets < 2) {
+                system("cls");
+                input_set(&sets[numSets], &sizes[numSets]);
+                numSets++;
+            }
+            else {
+                printf("Вы уже ввели два множества.\n");
+            }
             printf("\nНажмите Enter для перехода в меню...\n");
             getchar();
             getchar();
             break;
         }
-        case 2:
-            if (numSets > 0) {
+        case 2: {
+            if (numSets < 2) {
                 system("cls");
-                for (int i = 0; i < numSets; i++) {
-                    printf("В %d множестве находятся: ", i + 1);
-                    for (int j = 0; j < sizes[i]; j++) printf("%d ", sets[i][j]);
-                    printf("\n");
-                }
-
-                if (numSets < 2) {
-                    printf("Пожалуйста, введите хотя бы два множества для нахождения симметрической разности.\n");
-                }
-                else {
-                    symmetric_difference(sets, sizes, numSets);
-                }
+                input_random_set(&sets[numSets], &sizes[numSets]);
+                numSets++;
+            }
+            else {
+                printf("Вы уже ввели два множества.\n");
+            }
+            printf("\nНажмите Enter для перехода в меню...\n");
+            getchar();
+            getchar();
+            break;
+        }
+        case 3:
+            if (numSets == 2) {
+                system("cls");
+                printf("Первое множество: ");
+                for (int j = 0; j < sizes[0]; j++) printf("%d ", sets[0][j]);
+                printf("\nВторое множество: ");
+                for (int j = 0; j < sizes[1]; j++) printf("%d ", sets[1][j]);
+                printf("\n");
+                symmetric_difference(sets[0], sizes[0], sets[1], sizes[1]);
                 printf("\nНажмите Enter для перехода в меню...\n");
                 getchar();
                 getchar();
             }
             else {
-                printf("Сначала введите хотя бы одно множество.\n");
+                printf("Пожалуйста, введите два множества для нахождения симметрической разности.\n");
                 printf("\nНажмите Enter для перехода в меню...\n");
                 getchar();
                 getchar();
             }
             break;
 
-        case 3:
+        case 4:
             printf("Выход из программы.\n");
             break;
         default:
@@ -161,13 +218,11 @@ int main() {
             getchar();
             getchar();
         }
-    } while (choice != 3);
+    } while (choice != 4);
 
     for (int i = 0; i < numSets; i++) {
         free(sets[i]);
     }
-    free(sets);
-    free(sizes);
 
     return 0;
 }

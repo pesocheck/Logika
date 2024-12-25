@@ -1,2 +1,3 @@
 ﻿  kursach.cpp
+F:\logika\курсач\kursach\kursach.cpp(140,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   kursach.vcxproj -> F:\logika\курсач\kursach\x64\Debug\kursach.exe
